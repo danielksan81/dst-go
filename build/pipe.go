@@ -10,6 +10,9 @@ func pipe(CommandsToExecute ...*exec.Cmd) (outputBuff bytes.Buffer, err error) {
 	stderrBuff, stdoutBuff, stdinBuff := &bytes.Buffer{}, &bytes.Buffer{}, &bytes.Buffer{}
 
 	for _, cmd := range CommandsToExecute {
+
+		stdoutBuff = &bytes.Buffer{}
+
 		cmd.Stdin = stdinBuff
 		cmd.Stderr = stderrBuff
 		cmd.Stdout = stdoutBuff
