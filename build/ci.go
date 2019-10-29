@@ -149,7 +149,8 @@ func fetchVendoredPackages() {
 
 	//Delete all the existing vendored files
 	root := filepath.Join(tempProjectRoot, "vendor")
-	if vendorFile, err := os.Stat(root); os.IsNotExist(err) || !vendorFile.IsDir() {
+	var vendorFile os.FileInfo
+	if vendorFile, err = os.Stat(root); os.IsNotExist(err) || !vendorFile.IsDir() {
 		fmt.Println("Vendor directory missing or it is a file")
 		os.Exit(1)
 	}
@@ -169,6 +170,7 @@ func fetchVendoredPackages() {
 	}
 
 	//Fetch vendored libraries using tool
+	// #nosec G204. To suppress gosec linter warning. The below command is safe to use.
 	cmd = exec.Command(filepath.Join(tempGoPath, "/bin/govendor"), "sync", "-v")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -179,6 +181,7 @@ func fetchVendoredPackages() {
 	}
 
 	//Print the status of vendored libraries
+	// #nosec G204. To suppress gosec linter warning. The below command is safe to use.
 	cmd = exec.Command(filepath.Join(tempGoPath, "/bin/govendor"), "list")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -298,6 +301,7 @@ func performLint() {
 	fmt.Println("                     Linting the code                     ")
 	fmt.Println("----------------------------------------------------------")
 	fmt.Printf("\nInstalling Linters...\t")
+	// #nosec G204. To suppress gosec linter warning. The below command is safe to use.
 	cmd := exec.Command(filepath.Join(tempGoPath, "/bin/gometalinter.v2"), "--install")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -312,6 +316,7 @@ func performLint() {
 	//Configuration for the linters is stored in a json file.
 	configFile := filepath.Join(tempProjectRoot, "build/linterConfig.json")
 
+	// #nosec G204. To suppress gosec linter warning. The below command is safe to use.
 	cmd = exec.Command(filepath.Join(tempGoPath, "/bin/gometalinter.v2"), "--config="+configFile, "./...")
 	output, err = cmd.CombinedOutput()
 	if err != nil {

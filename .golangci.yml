@@ -84,7 +84,7 @@ linters-settings:
   goimports:
     # put imports beginning with prefix after 3rd-party packages;
     # it's a comma-separated list of prefixes
-    local-prefixes: github.com/org/project
+    local-prefixes: github.com/direct-state-transfer/dst-go
   gocyclo:
     # minimal code complexity to report, 30 by default (but we recommend 10-20)
     min-complexity: 10
@@ -153,11 +153,11 @@ linters-settings:
     # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`
     # By default list of stable checks is used.
     enabled-checks:
-      - rangeValCopy
 
     # Which checks should be disabled; can't be combined with 'enabled-checks'; default is empty
     disabled-checks:
       - regexpMust
+      - rangeValCopy
 
     # Enable multiple checks by tags, run `GL_DEBUG=gocritic golangci-lint run` to see all tags and checks.
     # Empty list by default. See https://github.com/go-critic/go-critic#usage -> section "Tags".
@@ -167,8 +167,6 @@ linters-settings:
     settings: # settings passed to gocritic
       captLocal: # must be valid enabled check name
         paramsOnly: true
-      rangeValCopy:
-        sizeThreshold: 32
   godox:
     # report any comments starting with keywords, this is useful for TODO or FIXME comments that
     # might be left in the code accidentally and should be resolved before merging
@@ -242,11 +240,20 @@ issues:
         - gosec
         - scopelint
 
-    # Exclude some staticcheck messages
+    # unused and deadcode linters are disabled for the this file
+    # because, the package is still under development and the file contains
+    # functions that are unused now and will be used in future.
+    - path: dst-go/main.go|dst-go/session.go
+      linters:
+        - unused
+        - deadcode
+
+    # SA2002 - Called testing.T.FailNow or SkipNow in a goroutine, which isn't allowed
+    #          This is disabled because, we call T.Failnow in few tests in channel module and
+    #          it is implemented to work correctly using synchronization mechnisms like waitgroup
     - linters:
         - staticcheck
-      text: "SA9003:"
-      text: "SA2002:"
+      text: "SA2002"
 
     # Exclude lll issues for long lines with go:generate
     - linters:
