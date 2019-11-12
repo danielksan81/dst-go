@@ -22,7 +22,8 @@ a go development environment or using existing one for this project is not desir
 Available commands are:
 
 	install        -- install the dst-go software
-	lint           -- run meta-linter with configuration linterConfig.json
+	lint           -- run meta-linter with configuration as defined in the
+					  .golangci.yml file in project root.
 	test           -- run unit tests, with options as in "go test" command
 	runWalkthrough -- build and run walkthrough. Behavior is configurable with
 	                  options such as "--simulated_backend", "--real_backend",
