@@ -88,6 +88,7 @@ func main() {
 		runWalkthrough(os.Args[2:])
 
 	case "lint":
+		fetchVendoredPackages()
 		performLint()
 	}
 }
@@ -310,7 +311,7 @@ func performLint() {
 
 	// Configuration is fetched from the file .golangci.yml in project root directory.
 	// #nosec G204. To suppress gosec linter warning. The below command is safe to use.
-	cmd := exec.Command(filepath.Join(tempGoPath, "/bin/golangci-lint"), "run", "./...", "--skip-dirs", "workspace_")
+	cmd := exec.Command(filepath.Join(tempGoPath, "/bin/golangci-lint"), "run", "./...")
 	cmd.Dir = tempProjectRoot
 	output, err := cmd.CombinedOutput()
 	if err != nil {
